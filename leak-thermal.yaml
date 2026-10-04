@@ -171,7 +171,8 @@ interval:
   - interval: 60s
     then:
       - lambda: |-
-          static float h[90];
+          const int N = 60, GAP = 15;                // Basisfenster: 15–59 min zurück
+          static float h[60];
           static int n = 0, i = 0, low_cnt = 0, rise_cnt = 0;
           static float last_q = NAN;
           float dt = id(delta_t).state;
@@ -181,20 +182,20 @@ interval:
             id(leak_large).publish_state(false);
             return;
           }
-          h[i] = dt; i = (i + 1) % 90; if (n < 90) n++;
-          if (n < 90) return;                       // 90 min Vorlauf
-          auto ago = [&](int k) { return h[(i - 1 - k + 180) % 90]; };
+          h[i] = dt; i = (i + 1) % N; if (n < N) n++;
+          if (n < N) return;                         // 60 min Vorlauf
+          auto ago = [&](int k) { return h[(i - 1 - k + 2 * N) % N]; };
 
           float cur = 0;                             // aktuell: Mittel letzte 5 min
           for (int k = 0; k < 5; k++) cur += ago(k);
           cur /= 5;
 
-          float sum = 0, mn = 1e9, mx = -1e9;        // Basis: 30–89 min zurück
-          for (int k = 30; k < 90; k++) {
+          float sum = 0, mn = 1e9, mx = -1e9;        // Basis: 15–59 min zurück
+          for (int k = GAP; k < N; k++) {
             float v = ago(k); sum += v;
             if (v < mn) mn = v; if (v > mx) mx = v;
           }
-          float base = sum / 60;
+          float base = sum / (N - GAP);
           bool q = (mx - mn) < 0.10f;                // keine Entnahme im Basisfenster
           if (q) last_q = base;
 
