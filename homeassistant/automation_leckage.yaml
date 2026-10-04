@@ -16,7 +16,7 @@ actions:
       title: "Leckage-Verdacht"
       message: >-
         {% if trigger.id == 'mikro' %}
-        Mikroleck-Verdacht – bitte prüfen und am Gerät „Leckverdacht quittieren“ drücken.
+        Mikroleck-Verdacht – bitte prüfen und auf dem Dashboard „Leckverdacht quittieren“ drücken.
         {% else %}
         Seit über 90 min Dauerfluss erkannt.
         {% endif %}
