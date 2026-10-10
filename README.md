@@ -63,6 +63,10 @@ Eine Mengenangabe in L/h liefert das Verfahren nicht.
 5. Leitungen unter der Isolierung zum Austritt bei 0 cm führen, Isolierung über die vollen 25 cm luftdicht verkleben.
 6. Elektronik an der Wand, nicht am Kaltwasserrohr.
 
+<img src="docs/montage_rohr.jpg" alt="Montage an der Leitung" width="400">
+
+*Fertig montiert: Elektronik im Gehäuse an der Wand, darunter das isolierte Messstück auf der Wasserleitung. Die Sensor- und Heizleitungen treten am Ende der Isolierung aus und laufen zur Klemmleiste im Gehäuse.*
+
 ## Verdrahtung
 
 ![Schaltplan](docs/schaltplan.png)
@@ -81,6 +85,10 @@ Eine Mengenangabe in L/h liefert das Verfahren nicht.
 - IRLZ44N, Ansicht auf die Beschriftung, Beine unten: Gate – Drain – Source.
 - DS18B20, Ansicht auf die flache Seite, Beine unten: GND – DQ – VDD.
 - Nie Breakout und die USB-Buchse des ESP32 gleichzeitig an Strom.
+
+![Aufbau auf Lochrasterplatine](docs/platine.jpg)
+
+*Aufbau auf Lochrasterplatine: ESP32-DevKitC in der Mitte, links der IRLZ44N, rechts oben der Micro-USB-Breakout für die Versorgung. Über die Schraubklemmen rechts werden die Heizmatte (2-polig) und die beiden DS18B20 (3-polig, gemeinsamer 1-Wire-Bus) angeschlossen.*
 
 ## Installation
 
