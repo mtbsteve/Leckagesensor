@@ -19,7 +19,7 @@ Im Stillstand verteilt natürliche Konvektion im waagerechten Rohr die Wärme bi
 | Zapfung (WC, Hahn) | fällt sprunghaft um 0,6–0,8 K, erholt sich in 30–60 min von unten |
 | Mikroleck 0,5–0,7 L/h | springt in 5–10 min um +0,15–0,3 K aus dem Plateau; danach je nach Durchfluss erhöht oder leicht unter der Basis |
 
-**Regel 1 – Mikroleck:** ΔT (Mittel der letzten 5 min) liegt 3 min lang mehr als 0,10 K über der gleitenden Basis (Mittel von 30–90 min zurück), und im Basisfenster gab es keine Entnahme (Schwankung < 0,10 K). Der Verdacht wird gespeichert und bleibt bis zur Quittierung in Home Assistant bestehen – auch über einen Neustart.
+**Regel 1 – Mikroleck:** ΔT (Mittel der letzten 5 min) liegt 3 min lang mehr als 0,10 K über der gleitenden Basis (Mittel von 15–60 min zurück), und im Basisfenster gab es keine Entnahme (Schwankung < 0,10 K). Der Verdacht wird gespeichert und bleibt bis zur Quittierung in Home Assistant bestehen – auch über einen Neustart.
 
 **Regel 2 – Dauerfluss:** ΔT liegt länger als 90 min mehr als 0,3 K unter der letzten Ruhebasis. Noch nicht durch eine Messung bestätigt.
 
@@ -30,7 +30,7 @@ Eine Mengenangabe in L/h liefert das Verfahren nicht.
 | Erkennung Mikroleck | ab ca. 0,5 L/h |
 | Reaktionszeit | ca. 5–10 min bis Verdacht und Alarm |
 | Heizleistung | 0,94 W (22 Ω an 5 V, 80 % PWM) bzw. 1,14 W bei 100 % |
-| Vorlauf nach Neustart / Heizung aus | 90 min |
+| Vorlauf nach Neustart / Heizung aus | 60 min |
 | Leistungsaufnahme gesamt | ca. 1,5 W an 5 V (Heizung + ESP32) |
 
 ## Stückliste
@@ -105,8 +105,8 @@ Eine Mengenangabe in L/h liefert das Verfahren nicht.
 2. Offset: Heizung aus, beide Sensoren flach aneinander kleben, 60 min warten, „Offset kalibrieren“ drücken. „Rohr ΔT“ zeigt danach ≈ 0,00 K.
 
 **Am Rohr**
-1. Montieren, isolieren, Heizung an, 90 min Vorlauf.
-2. Test Mikroleck: nach mind. 90 min ohne Entnahme einen Hahn auf ca. 0,5 L/h stellen. „Leckage-Verdacht Mikro“ geht nach 5–10 min auf *Problem* und bleibt dort. Danach „Leckverdacht quittieren“.
+1. Montieren, isolieren, Heizung an, 60 min Vorlauf.
+2. Test Mikroleck: nach mind. 60 min ohne Entnahme einen Hahn auf ca. 0,5 L/h stellen. „Leckage-Verdacht Mikro“ geht nach 5–10 min auf *Problem* und bleibt dort. Danach „Leckverdacht quittieren“.
 3. Test Dauerfluss (offen): ca. 3 L/h über 2 h.
 
 Den Offset am Rohr nicht neu kalibrieren: Die Heizzone braucht nach dem Abschalten weit mehr als 90 min, und Temperaturschichtung im Rohr verfälscht den Wert. Für die Leckauswertung ist der Offset ohnehin unerheblich. Ein falsch gesetzter Offset lässt sich per HA-Aktion `esphome.leak_thermal_korrigiere_offset` verschieben.
@@ -116,7 +116,7 @@ Den Offset am Rohr nicht neu kalibrieren: Die Heizzone braucht nach dem Abschalt
 | Entität | Bedeutung |
 | --- | --- |
 | Rohr ΔT | T_beheizt − T_Referenz − Offset, 2-min-Mittel |
-| ΔT Basis (30–90 min) | Mittel von ΔT von vor 90 bis vor 30 min |
+| ΔT Basis (15–60 min) | Mittel von ΔT von vor 60 bis vor 15 min |
 | ΔT Abweichung von Basis | aktuelles ΔT (5-min-Mittel) minus Basis – das eigentliche Messsignal |
 | Ruhephase (Basis gültig) | An = im Basisfenster keine Entnahme; nur dann kann Regel 1 auslösen |
 | Leckage-Verdacht Mikro | Problem = Sprung erkannt, bleibt bis Quittierung |
@@ -127,7 +127,7 @@ Den Offset am Rohr nicht neu kalibrieren: Die Heizzone braucht nach dem Abschalt
 ## Grenzen
 
 - Ein Leck, das während einer Zapfung beginnt, erzeugt keinen Sprung aus der Ruhe und wird von Regel 1 nicht erkannt. Abhilfe (geplant): nächtliches Plateau mit dem Median der letzten Nächte vergleichen.
-- Regel 1 kann nur aus einer Ruhephase heraus auslösen (90 min ohne Entnahme).
+- Regel 1 kann nur aus einer Ruhephase heraus auslösen (60 min ohne Entnahme).
 - Die Kennlinie ist nicht monoton; Verhalten bei 1–5 L/h noch nicht gemessen.
 - Trinkwasser: Die Heizung legt lokal ca. 1 K auf. Sicherheitsabschaltung bei 30 °C Rohrtemperatur.
 - Kondensat: Isolierung dicht halten.

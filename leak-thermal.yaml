@@ -122,7 +122,7 @@ sensor:
 
   - platform: template
     id: dt_base
-    name: "ΔT Basis (30–90 min)"
+    name: "ΔT Basis (15–60 min)"
     unit_of_measurement: "K"
     accuracy_decimals: 3
     update_interval: never
